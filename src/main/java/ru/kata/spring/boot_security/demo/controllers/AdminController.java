@@ -14,7 +14,6 @@ import ru.kata.spring.boot_security.demo.service.UserService;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Controller
 @RequestMapping("/admin")
@@ -40,37 +39,38 @@ public class AdminController {
     @GetMapping("/users-add")
     public String addUserForm(Model model) {
         model.addAttribute("user", new User());
-        model.addAttribute("role", new HashSet<Role>());
+        model.addAttribute("role", new ArrayList<Role>());
         return "users-add";
     }
 
     @PostMapping("/users-add")
     public String addUser(@ModelAttribute("user") User user, @RequestParam(value = "role") String[] roles) {
-        Set<Role> roleSet = new HashSet<>();
+        List<Role> roleSet = new ArrayList<>();
         for(String role : roles) {
             roleSet.add(new Role(role));
         }
         roleRepository.saveAll(roleSet);
         user.setRoles(roleSet);
-        userService.addUser(user);
+        userRepository.save(user);
+
         return "redirect:/admin";
     }
 
-    @DeleteMapping("/{id}")
+    @PostMapping("/{id}")
     public String deleteUser(@PathVariable("id") long id) {
         userService.removeUser(id);
         return "redirect:/admin";
     }
 
-    @GetMapping("user-update/{id}")
+    @GetMapping("/user-update/{id}")
     public String updateUserForm(@PathVariable("id") Long id, Model model) {
         model.addAttribute("user", userService.getUserById(id));
         return "users-update";
     }
 
-    @PostMapping("/{id}")
+    @PostMapping("/user-update/{id}")
     public String update(@ModelAttribute("user") User user, @PathVariable("id") long id, @RequestParam(value = "role") String[] roles) {
-        Set<Role> roleSet = new HashSet<>();
+        List<Role> roleSet = new ArrayList<>();
         for(String role : roles) {
             roleSet.add(new Role(role));
         }

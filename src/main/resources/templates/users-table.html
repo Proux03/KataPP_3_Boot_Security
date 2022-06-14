@@ -48,7 +48,7 @@
                 </form>
                 </div>
                 <div style="float:right; width:60px;">
-                <form th:method="DELETE" th:action="@{/admin/{id}(id=${user.id})}">
+                <form th:method="POST" th:action="@{/admin/{id}(id=${user.id})}">
                     <input type="submit" value="DELETE"/>
                 </form>
                 </div>
