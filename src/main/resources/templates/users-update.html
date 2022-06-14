@@ -9,10 +9,9 @@
 <body>
 <h1>Update user page</h1>
 
-<form th:method="PUT" th:action="@{/admin/user-update}" th:object="${user}">
+<form th:method="PATCH" th:action="@{'/admin/' + ${user.id}}" th:object="${user}">
 
-    <label for="id">ID</label>
-    <input readonly type="number" th:field="*{id}" id="id" placeholder="ID">
+    <input type="hidden" name="id" th:value="${user.getId()}">
     <br/>
     <label for="username">Username</label>
     <input type="text" th:field="*{username}" id="username" placeholder="Username">

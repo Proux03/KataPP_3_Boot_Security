@@ -61,14 +61,14 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @GetMapping("/user-update/{id}")
+    @GetMapping("user-update/{id}")
     public String updateUserForm(@PathVariable("id") Long id, Model model) {
         model.addAttribute("user", userService.getUserById(id));
         return "users-update";
     }
 
-    @PutMapping("/user-update/")
-    public String update(User user, @RequestParam(value = "role") String[] roles) {
+    @RequestMapping("/{id}")
+    public String update(User user, @PathVariable Long id, @RequestParam(value = "role") String[] roles) {
         List<Role> roleSet = new ArrayList<>();
         for(String role : roles) {
             roleSet.add(new Role(role));
