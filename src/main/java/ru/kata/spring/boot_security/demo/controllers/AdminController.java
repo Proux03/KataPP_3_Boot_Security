@@ -52,11 +52,10 @@ public class AdminController {
         roleRepository.saveAll(roleSet);
         user.setRoles(roleSet);
         userRepository.save(user);
-
         return "redirect:/admin";
     }
 
-    @PostMapping("/{id}")
+    @DeleteMapping("/{id}")
     public String deleteUser(@PathVariable("id") long id) {
         userService.removeUser(id);
         return "redirect:/admin";
@@ -68,8 +67,8 @@ public class AdminController {
         return "users-update";
     }
 
-    @PostMapping("/user-update/{id}")
-    public String update(@ModelAttribute("user") User user, @PathVariable("id") long id, @RequestParam(value = "role") String[] roles) {
+    @PutMapping("/user-update/")
+    public String update(User user, @RequestParam(value = "role") String[] roles) {
         List<Role> roleSet = new ArrayList<>();
         for(String role : roles) {
             roleSet.add(new Role(role));

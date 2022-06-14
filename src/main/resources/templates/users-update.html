@@ -9,7 +9,7 @@
 <body>
 <h1>Update user page</h1>
 
-<form th:method="POST" th:action="@{'/admin/user-update/' + ${user.id}}" th:object="${user}">
+<form th:method="PUT" th:action="@{/admin/user-update}" th:object="${user}">
 
     <label for="id">ID</label>
     <input readonly type="number" th:field="*{id}" id="id" placeholder="ID">
