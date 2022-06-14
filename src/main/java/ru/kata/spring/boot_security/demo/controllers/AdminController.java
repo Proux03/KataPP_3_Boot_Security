@@ -13,7 +13,7 @@ import ru.kata.spring.boot_security.demo.service.UserService;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/admin")
@@ -45,13 +45,8 @@ public class AdminController {
 
     @PostMapping("/users-add")
     public String addUser(@ModelAttribute("user") User user, @RequestParam(value = "role") String[] roles) {
-        List<Role> roleSet = new ArrayList<>();
-        for(String role : roles) {
-            roleSet.add(new Role(role));
-        }
-        roleRepository.saveAll(roleSet);
-        user.setRoles(roleSet);
-        userRepository.save(user);
+        user.setRoles(getRoles(roles));
+        userService.addUser(user);
         return "redirect:/admin";
     }
 
@@ -69,13 +64,16 @@ public class AdminController {
 
     @RequestMapping("/{id}")
     public String update(User user, @PathVariable Long id, @RequestParam(value = "role") String[] roles) {
-        List<Role> roleSet = new ArrayList<>();
-        for(String role : roles) {
-            roleSet.add(new Role(role));
-        }
-        roleRepository.saveAll(roleSet);
-        user.setRoles(roleSet);
+        user.setRoles(getRoles(roles));
         userService.addUser(user);
         return "redirect:/admin";
+    }
+
+    public Set<Role> getRoles(String[] roles) {
+        Set<Role> roleSet = new HashSet<>();
+        for (String role : roles) {
+            roleSet.add(roleRepository.findByName(role));
+        }
+        return roleSet;
     }
 }
