@@ -11,9 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
-
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,7 +35,12 @@ public class UserService implements UserDetailsService {
     }
 
     public User getUserById(long id) {
-        return userRepository.getOne(id);
+        User user = null;
+        Optional<User> optional = userRepository.findById(id);
+        if(optional.isPresent()) {
+            user = optional.get();
+        }
+        return user;
     }
 
     public void addUser(User user) {
@@ -53,7 +58,6 @@ public class UserService implements UserDetailsService {
         if(user == null) {
             throw new UsernameNotFoundException("User not found");
         }
-
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
                 roleToAuthority(user.getRoles()));
     }
