@@ -12,7 +12,6 @@ $(async function () {
     await getNewUserForm();
     await getDefaultModal();
     await createUser();
-
 })
 
 const userFetch = {

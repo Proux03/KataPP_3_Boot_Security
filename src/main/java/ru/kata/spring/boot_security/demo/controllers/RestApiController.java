@@ -3,6 +3,7 @@ package ru.kata.spring.boot_security.demo.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
@@ -21,17 +22,20 @@ public class RestApiController {
         this.userService = userService;
     }
 
+    @Secured(value = {"ROLE_ADMIN"})
     @GetMapping("/users")
     public ResponseEntity<List<User>> getUsers() {
         return new ResponseEntity<>(userService.getAllUsers(),HttpStatus.OK);
     }
 
+    @Secured(value = {"ROLE_ADMIN"})
     @PostMapping("/users")
     public ResponseEntity<String> createUser(@RequestBody User user) {
         userService.addUser(user);
         return new ResponseEntity<>("User created", HttpStatus.OK);
     }
 
+    @Secured(value = {"ROLE_ADMIN"})
     @DeleteMapping("/users/{id}")
     public ResponseEntity<String> pageDelete(@PathVariable("id") long id) {
         userService.removeUser(id);
@@ -50,6 +54,7 @@ public class RestApiController {
         return new ResponseEntity<>(user,HttpStatus.OK);
     }
 
+    @Secured(value = {"ROLE_ADMIN"})
     @PutMapping("/users/{id}")
     public ResponseEntity<String> pageEdit(@PathVariable("id") long id, @RequestBody User user) {
         userService.addUser(user);
